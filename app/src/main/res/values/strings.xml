@@ -10,4 +10,6 @@
     <string name="release_date">Release Date</string>
     <string name="votes">Votes</string>
     <string name="overview">overview</string>
+    <string name="profile">Profile</string>
+    <string name="bookmark">Favourite</string>
 </resources>

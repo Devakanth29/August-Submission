@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.Movie
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Upcoming
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,9 +36,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import uk.ac.tees.mad.w9617422.R
+import uk.ac.tees.mad.w9617422.moviesList.presentation.MovieListState
 import uk.ac.tees.mad.w9617422.moviesList.presentation.MovieListUiEvent
 import uk.ac.tees.mad.w9617422.moviesList.presentation.MovieListViewModel
 import uk.ac.tees.mad.w9617422.moviesList.utils.Screen
+import uk.ac.tees.mad.w9617422.presentation.bookmark.BookmarkScreen
+import uk.ac.tees.mad.w9617422.presentation.profile.ProfileScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,22 +55,22 @@ fun HomeScreen(navController: NavHostController) {
         BottomNavigationBar(
             bottomNavController = bottomNavController, onEvent = movieListViewModel::onEvent
         )
-    }, topBar = {
-        TopAppBar(
-            title = {
-                Text(
-                    text = if (movieListState.isCurrentPopularScreen)
-                        stringResource(R.string.popular_movies)
-                    else
-                        stringResource(R.string.upcoming_movies),
-                    fontSize = 20.sp
-                )
-            },
-            modifier = Modifier.shadow(2.dp),
-            colors = TopAppBarDefaults.smallTopAppBarColors(
-                MaterialTheme.colorScheme.inverseOnSurface
-            )
-        )
+//    }, topBar = {
+//        TopAppBar(
+//            title = {
+//                Text(
+//                    text = if (movieListState.isCurrentPopularScreen)
+//                        stringResource(R.string.popular_movies)
+//                    else
+//                        stringResource(R.string.upcoming_movies),
+//                    fontSize = 20.sp
+//                )
+//            },
+//            modifier = Modifier.shadow(2.dp),
+//            colors = TopAppBarDefaults.smallTopAppBarColors(
+//                MaterialTheme.colorScheme.inverseOnSurface
+//            )
+//        )
     }) {
         Box(
             modifier = Modifier
@@ -90,6 +95,14 @@ fun HomeScreen(navController: NavHostController) {
                         onEvent = movieListViewModel::onEvent
                     )
                 }
+
+                composable(Screen.BookmarkScreen.rout) {
+                    BookmarkScreen(navController, movieListState)
+                }
+
+                composable(Screen.ProfileScreen.rout) {
+                    ProfileScreen(navController)
+                }
             }
         }
     }
@@ -109,6 +122,12 @@ fun BottomNavigationBar(
         ), BottomItem(
             title = stringResource(R.string.upcoming),
             icon = Icons.Rounded.Upcoming
+        ), BottomItem(
+            title = stringResource(R.string.bookmark),
+            icon = Icons.Rounded.Bookmark
+        ), BottomItem(
+            title = stringResource(R.string.profile),
+            icon = Icons.Rounded.Person
         )
     )
 
@@ -134,6 +153,18 @@ fun BottomNavigationBar(
                             onEvent(MovieListUiEvent.Navigate)
                             bottomNavController.popBackStack()
                             bottomNavController.navigate(Screen.UpcomingMovieList.rout)
+                        }
+
+                        2 -> {
+                            onEvent(MovieListUiEvent.Navigate)
+                            bottomNavController.popBackStack()
+                            bottomNavController.navigate(Screen.BookmarkScreen.rout)
+                        }
+
+                        3 -> {
+                            onEvent(MovieListUiEvent.Navigate)
+                            bottomNavController.popBackStack()
+                            bottomNavController.navigate(Screen.ProfileScreen.rout)
                         }
                     }
                 }, icon = {
